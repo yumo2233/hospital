@@ -50,7 +50,7 @@
     "quickapp" : {},
     /* 小程序特有相关 */
     "mp-weixin" : {
-        "appid" : "你的小程序APPID",
+        "appid" : "wxe433448d4d18a975",
         "setting" : {
             "urlCheck" : false,
             "minified" : true
@@ -61,11 +61,12 @@
             "ocr-plugin" : {
                 "version" : "3.0.6",
                 "provider" : "wx4418e3e031e551be"
-            },
-            "WechatSI" : {
-                "version" : "0.3.5",
-                "provider" : "wx069ba97219f66d99"
-            }
+				}
+            // },
+            // "WechatSI" : {
+            //     "version" : "0.3.5",
+            //     "provider" : "wx069ba97219f66d99"
+            // }
         },
         "permission" : {
             "scope.userLocation" : {

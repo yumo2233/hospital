@@ -273,11 +273,86 @@ export default {
         };
     },
     methods: {
-        
+        loadDataList: function() {
+            let that = this;
+            that.dataListLoading = true;
+            let json = { 在职: 1, 离职: 2, 退休: 3 };
+            let data = {
+                page: that.pageIndex,
+                length: that.pageSize,
+                name: that.dataForm.name == '' ? null : that.dataForm.name,
+                deptId: that.dataForm.deptId == '' ? null : that.dataForm.deptId,
+                degree: that.dataForm.degree == '' ? null : that.dataForm.degree,
+                job: that.dataForm.job == '' ? null : that.dataForm.job,
+                recommended: that.dataForm.recommended == '' ? null : that.dataForm.recommended,
+                status: json[that.dataForm.status],
+                order: that.dataForm.order
+            };
+            that.$http('/doctor/searchByPage', 'POST', data, true, function(resp) {
+                let result = resp.result;
+                let temp = {
+                    '1': '在职',
+                    '2': '离职',
+                    '3': '退休'
+                };
+                for (let one of result.list) {
+                    one.status = temp[one.status + ''];
+                }
+                that.dataList = result.list;
+                that.totalCount = result.totalCount;
+                that.dataListLoading = false;
+            });
+        },
+		loadMedicalDeptList: function() {
+		    let that = this;
+		    that.$http('/medical/dept/searchAll', 'GET', {}, true, function(resp) {
+		        that.medicalDeptList = resp.result;
+		    });
+		},
+		sizeChangeHandle(val) {
+			this.pageSize = val;
+			this.pageIndex = 1;
+			this.loadDataList();
+		},
+		currentChangeHandle(val) {
+			this.pageIndex = val;
+			this.loadDataList();
+		},
+	created: function() {
+        this.loadMedicalDeptList();
+        this.loadDataList();
     },
-    created: function() {
-        
-    }
+	searchHandle: function() {
+		this.$refs['dataForm'].validate(valid => {
+			if (valid) {
+				this.$refs['dataForm'].clearValidate();
+				if (this.pageIndex != 1) {
+					this.pageIndex = 1;
+				}
+				this.loadDataList();
+			} else {
+				return false;
+			}
+		});
+	},
+	orderHandle: function(param) {
+	    let prop = param.prop;
+	    let order = param.order;
+	    if (order == 'ascending') {
+	        this.dataForm.order = 'ASC';
+	    } else if (order == 'descending') {
+	        this.dataForm.order = 'DESC';
+	    } else {
+	        return;
+	    }
+	    this.dataList = [];
+	    this.loadDataList();
+	},
+
+    },
+    
+
+
 };
 </script>
 

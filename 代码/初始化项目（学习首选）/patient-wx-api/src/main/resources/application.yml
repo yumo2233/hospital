@@ -12,7 +12,7 @@ server:
 spring:
   datasource:
     driver-class-name: org.apache.phoenix.queryserver.client.Driver
-    url: jdbc:phoenix:thin:url=http://phoenix的IP地址:8765;serialization=PROTOBUF
+    url: jdbc:phoenix:thin:url=http://localhost:8765;serialization=PROTOBUF
     type: com.alibaba.druid.pool.DruidDataSource
     druid:
       test-on-borrow: true
@@ -29,7 +29,7 @@ spring:
 
   redis:
     database: 0
-    host: Redis的IP地址
+    host: localhost
     port: 6379
     password: abc123456
     jedis:
@@ -73,14 +73,14 @@ sa-token:
 
 
 wechat:
-  app-id: 你的微信小程序APPID
-  app-secret: 你的微信小程序密钥
+  app-id: wxe433448d4d18a975
+  app-secret: ed0c9aaf1f2c21376e598aa3bb51e9d8
   pay:
     v3:
       patient-wx-api:
-        app-id: 你的微信小程序APPID
-        app-v3-secret: 微信商户平台密钥
-        mch-id: 微信商户平台ID
+        app-id: wxe433448d4d18a975
+        app-v3-secret: 6c6085b7a939450d833d8bb3081d4628
+        mch-id: 1526972031
         domain: http://内网穿透的外网IP地址和端口/patient-wx-api
         cert-path: apiclient_cert.p12
 
@@ -93,12 +93,12 @@ tencent:
       groupName: hospital
       region: ap-beijing
   trtc:
-    appId: TRTC的appId
+    appId: 23
     secretKey: TRTC的secretKey
     expire: 86400
 
 minio:
-  endpoint: http://Minio服务器地址:9000
+  endpoint: http://localhost:9000
   access-key: root
   secret-key: abc123456
 

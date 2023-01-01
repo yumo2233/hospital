@@ -28,7 +28,7 @@ app.$mount()
 // #endif
 
 
-let minioUrl = "http://Minio服务器IP:9000/hospital"
+let minioUrl = "http://192.168.43.67:9000/hospital"
 Vue.prototype.minioUrl = minioUrl
 
 let patientUrl = minioUrl + "/patient-wx"
@@ -40,7 +40,7 @@ Vue.prototype.tencent = {
 	}
 }
 
-let baseUrl = "http://你本地电脑IP或者云主机IP（不可以写localhost）:8091/patient-wx-api"
+let baseUrl = "http://192.168.43.67:8091/patient-wx-api"
 
 Vue.prototype.api = {
 

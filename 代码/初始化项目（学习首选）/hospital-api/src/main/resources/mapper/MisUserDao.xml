@@ -11,4 +11,11 @@
                  JOIN HOSPITAL.MIS_PERMISSION p ON rp."permission_id" = p."id"
         WHERE u."id" = ${userId}
     </select>
+    <select id="login" parameterType="Map" resultType="Integer">
+        SELECT "id"
+        FROM HOSPITAL.MIS_USER
+        WHERE "username" = #{username}
+          AND "password" = #{password}
+    </select>
+    <!--//结尾不要加英文分号，phionex会报错 -->
 </mapper>

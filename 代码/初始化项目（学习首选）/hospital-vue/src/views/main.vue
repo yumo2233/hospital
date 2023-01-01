@@ -361,7 +361,16 @@ export default {
 			this.mainTabs = [];
 			this.menuActiveName = '';
 			this.$router.push({ name: 'Home' });
-		}
+		},
+		logout: function() {
+		    let that = this;
+		    that.$http('/mis_user/logout', 'GET', null, true, function(resp) {
+		        localStorage.removeItem('permissions');
+		        localStorage.removeItem('token');
+		        that.$router.push({ name: 'Login' });
+		    });
+		},
+
 	},
 	mounted: function() {
 		let that = this;
