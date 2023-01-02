@@ -10,7 +10,7 @@ import javax.validation.constraints.Pattern;
  * @create 2022/11/30 - 20:52
  */
 @Data
-public class LoginForm {
+public class LoginForm {//
     @NotBlank(message = "username不能为空")
     @Pattern(regexp = "^[a-zA-Z0-9]{5,50}$", message = "username内容不正确")
     private String username;
