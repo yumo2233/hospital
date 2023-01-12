@@ -322,6 +322,37 @@ export default {
         this.loadMedicalDeptList();
         this.loadDataList();
     },
+	
+	expand: function(row, expandedRows) {
+	    
+		let that = this;
+	    if (expandedRows.length > 0) {
+	        that.expands = [];
+	        that.expands.push(row.id);
+	        let data = {
+	            id: row.id
+	        };
+	        that.$http("/doctor/searchContent", "POST", data, false, function(resp) {
+	            that.content.id = row.id;
+	            that.content.photo = `${that.$minioUrl}${resp.photo}?random=${Math.random()}`;
+	            that.content.pid = resp.pid;
+	            that.content.birthday = resp.birthday;
+	            that.content.uuid = resp.uuid;
+	            that.content.hiredate = resp.hiredate;
+	            that.content.email = resp.email;
+	            that.content.remark = resp.remark;
+	            that.content.tag = resp.tag;
+	            that.content.address = resp.address;
+	            that.content.description = resp.description;
+	        });
+	        
+	    } else {
+	        that.expands = [];
+	    }
+	},
+	
+	
+	
 	searchHandle: function() {
 		this.$refs['dataForm'].validate(valid => {
 			if (valid) {
@@ -335,6 +366,9 @@ export default {
 			}
 		});
 	},
+	
+	
+	
 	orderHandle: function(param) {
 	    let prop = param.prop;
 	    let order = param.order;
@@ -348,6 +382,25 @@ export default {
 	    this.dataList = [];
 	    this.loadDataList();
 	},
+	updatePhotoSuccess: function() {
+	    this.content.photo = `${this.$minioUrl}/doctor/doctor-${this.content.id}.jpg?random=${Math.random()}`;
+	},
+	updatePhotoError: function() {
+	    ElMessage({
+	        message: '文件上传失败',
+	        type: 'error',
+	        duration: 1200
+	    });
+	},
+	addHandle: function() {
+	    //使用$nextTick函数可以保证init函数中的代码都能执行完，不会强制结束
+	    this.$nextTick(() => {
+	        //调用doctor-add-or-update.vue页面的init函数
+	        this.$refs.addOrUpdate.init();
+	    });
+	},
+
+
 
     },
     

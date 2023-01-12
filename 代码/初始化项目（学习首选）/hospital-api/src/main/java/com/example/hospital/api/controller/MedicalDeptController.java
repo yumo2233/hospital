@@ -28,4 +28,10 @@ public class MedicalDeptController {
         return R.ok().put("result",list);
     }
 
+    @GetMapping("/searchDeptAndSub")
+    @SaCheckLogin
+    public R searchDeptAndSub(){
+        HashMap map = medicalDeptService.searchDeptAndSub();
+        return R.ok().put("result",map);
+    }
 }
