@@ -5,15 +5,12 @@ import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.dev33.satoken.annotation.SaMode;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.IdUtil;
+import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONUtil;
-import com.alibaba.druid.sql.PagerUtils;
 import com.example.hospital.api.common.PageUtils;
 import com.example.hospital.api.common.R;
-import com.example.hospital.api.controller.form.InsertDoctorForm;
-import com.example.hospital.api.controller.form.SearchDoctorByPageForm;
-import com.example.hospital.api.controller.form.SearchDoctorContentForm;
+import com.example.hospital.api.controller.form.*;
 import com.example.hospital.api.service.DoctorService;
-import com.example.hospital.api.service.impl.DoctorServiceImpl;
 import io.lettuce.core.dynamic.annotation.Param;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -75,6 +72,33 @@ public class DoctorController {
         param.replace("tag", json);
         param.put("uuid", IdUtil.simpleUUID().toUpperCase());
         doctorService.insert(param);
+        return R.ok();
+    }
+
+    @PostMapping("/searchById")
+    @SaCheckLogin
+    @SaCheckPermission(value = {"ROOT", "DOCTOR:SELECT"}, mode = SaMode.OR)
+    public R searchById(@RequestBody @Valid SearchDoctorByIdForm form) {
+        HashMap map = doctorService.searchById(form.getId());
+        return R.ok(map);
+    }
+
+    @PostMapping("/update")
+    @SaCheckLogin
+    @SaCheckPermission(value = {"ROOT", "DOCTOR:UPDATE"}, mode = SaMode.OR)
+    public R update(@RequestBody @Valid UpdateDoctorForm form) {
+        Map param = BeanUtil.beanToMap(form);
+        String json = JSONUtil.parseArray(form.getTag()).toString();
+        param.replace("tag", json);
+        doctorService.update(param);
+        return R.ok();
+    }
+
+    @PostMapping("/deleteByIds")
+    @SaCheckLogin
+    @SaCheckPermission(value = {"ROOT", "DOCTOR:DELETE"}, mode = SaMode.OR)
+    public R deleteByIds(@RequestBody@Valid DeleteDoctorByIdsForm form){
+        doctorService.deleteByIds(form.getIds());
         return R.ok();
     }
 }

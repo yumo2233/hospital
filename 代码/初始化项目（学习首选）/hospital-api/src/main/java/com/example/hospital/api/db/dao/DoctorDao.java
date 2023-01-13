@@ -1,6 +1,7 @@
 package com.example.hospital.api.db.dao;
 
 import com.example.hospital.api.db.pojo.DoctorEntity;
+import org.apache.hadoop.util.hash.Hash;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
@@ -19,6 +20,12 @@ public interface DoctorDao {
         public void insert(DoctorEntity entity);
 
         public Integer searchIdByUuid(String uuid);
+
+        public HashMap searchById(int id);
+
+        public void update(Map param);
+
+        public void deleteByIds(Integer[] ids);
 
 }
 

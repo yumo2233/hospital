@@ -36,8 +36,9 @@ import java.util.Map;
 public class DoctorServiceImpl implements DoctorService {
     @Resource
     private DoctorDao doctorDao;
-    private MedicalDeptSubAndDoctorDao medicalDeptSubAndDoctorDao;
     @Resource
+    private MedicalDeptSubAndDoctorDao medicalDeptSubAndDoctorDao;
+
 
     @Value("${minio.endpoint}")
     private String endpoint;
@@ -107,11 +108,34 @@ public class DoctorServiceImpl implements DoctorService {
 
 
         int subId = MapUtil.getInt(param, "subId");
-
         MedicalDeptSubAndDoctorEntity entity_2 = new MedicalDeptSubAndDoctorEntity();
         entity_2.setDeptSubId(subId);
         entity_2.setDoctorId(doctorId);
         medicalDeptSubAndDoctorDao.insert(entity_2);
 
+    }
+
+    @Override
+    public HashMap searchById(int id) {
+        HashMap map = doctorDao.searchById(id);
+        String tag = MapUtil.getStr(map, "tag");
+        JSONArray array = JSONUtil.parseArray(tag);
+        map.replace("tag",array);
+        return map;
+
+    }
+
+    @Transactional
+    @Override
+    public void update(Map param) {
+        doctorDao.update(param);
+        MapUtil.renameKey(param,"id","doctorId");
+        medicalDeptSubAndDoctorDao.updateDoctorSubDept(param);
+    }
+
+    @Override
+    @Transactional
+    public void deleteByIds(Integer[] ids) {
+        doctorDao.deleteByIds(ids);
     }
 }
