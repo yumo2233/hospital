@@ -66,7 +66,60 @@ export default {
 	},
 
 	methods: {
-		
+		reset: function() {
+		    let dataForm = {
+		        id: null,
+		        name: null,
+		        outpatient: null,
+		        recommended: null,
+		        description: null
+		    };
+		    this.dataForm = dataForm;
+		},
+	init: function(id) {
+	    let that = this;
+	    that.reset();
+	    that.dataForm.id = id || 0;
+	    that.visible = true;
+	    that.$nextTick(() => {
+	        that.$refs['dataForm'].resetFields();
+	        //这里是补充的代码
+	        if (id) {
+	            that.$http('/medical/dept/searchById', 'POST', { id: id }, true, function(resp) {
+	                that.dataForm.name = resp.name;
+	                that.dataForm.outpatient = resp.outpatient + '';
+	                that.dataForm.recommended = resp.recommended + '';
+	                that.dataForm.description = resp.description;
+	            });
+	        }
+	    });
+	},
+
+	dataFormSubmit: function() {
+	    let that = this;
+	    this.$refs['dataForm'].validate(valid => {
+	        if (valid) {
+	            that.$http(
+	                `/medical/dept/${!that.dataForm.id ? 'insert' : 'update'}`,
+	                'POST',
+	                that.dataForm,
+	                true,
+	                function(resp) {
+	                    ElMessage({
+	                        message: '操作成功',
+	                        type: 'success'
+	                    });
+	                    that.visible = false;
+	                    that.$emit('refreshDataList');
+	                }
+	            );
+	        }
+	    });
+	},
+
+
+	
+
 	}
 };
 </script>
