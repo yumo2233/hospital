@@ -57,7 +57,86 @@ export default {
     },
 
     methods: {
-        
+        reset: function() {
+            let dataForm = {
+                id: null,
+                name: null,
+                deptId: null,
+                location: null
+            };
+            this.dataForm = dataForm;
+        },
+		loadDeptList: function() {
+		    let that = this;
+		    that.$http('/medical/dept/searchAll', 'GET', {}, true, function(resp) {
+		        let result = resp.result;
+		        that.deptList = result;
+		    });
+		},
+		
+		init: function(id) {
+		    let that = this;
+		    that.reset();
+		    that.dataForm.id = id || 0;
+		    that.visible = true;
+		    that.$nextTick(() => {
+		        that.$refs['dataForm'].resetFields();
+		        that.loadDeptList();
+		        //这里是新添加的信息
+		        if (id) {
+		            that.$http('/medical/dept/sub/searchById', 'POST', { id: id }, true, function(resp) {
+		                that.dataForm.name = resp.name;
+		                that.dataForm.deptId = resp.deptId;
+		                that.dataForm.location = resp.location;
+		            });
+		        }
+		    });
+		},
+
+		dataFormSubmit: function() {
+		    let that = this;
+		    this.$refs['dataForm'].validate(valid => {
+		        if (valid) {
+		            that.$http(
+		                `/medical/dept/sub/${!that.dataForm.id ? 'insert' : 'update'}`,
+		                'POST',
+		                that.dataForm,
+		                true,
+		                function(resp) {
+		                    ElMessage({
+		                        message: '操作成功',
+		                        type: 'success'
+		                    });
+		                    that.visible = false;
+		                    that.$emit('refreshDataList');
+		                }
+		            );
+		        }
+		    });
+		},
+		dataFormSubmit: function() {
+		    let that = this;
+		    this.$refs['dataForm'].validate(valid => {
+		        if (valid) {
+		            that.$http(
+		                `/medical/dept/sub/${!that.dataForm.id ? 'insert' : 'update'}`,
+		                'POST',
+		                that.dataForm,
+		                true,
+		                function(resp) {
+		                    ElMessage({
+		                        message: '操作成功',
+		                        type: 'success'
+		                    });
+		                    that.visible = false;
+		                    that.$emit('refreshDataList');
+		                }
+		            );
+		        }
+		    });
+		}
+
+
     }
 };
 </script>

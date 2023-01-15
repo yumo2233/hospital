@@ -1,15 +1,19 @@
-package com.example.hospital.api.db.dao;
+package com.example.hospital.api.service;
 
+import com.example.hospital.api.common.PageUtils;
+import com.example.hospital.api.db.pojo.MedicalDeptEntity;
 import com.example.hospital.api.db.pojo.MedicalDeptSubEntity;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public interface MedicalDeptSubDao {
+/**
+ * @author Pzr
+ * @create 2023/1/15 - 0:41
+ */
+public interface MedicalDeptSubService {
 
-    public ArrayList<HashMap> searchByPage(Map param);
-    public long searchCount(Map param);
+    public PageUtils searchByPage(Map param);
 
     public void insert(MedicalDeptSubEntity entity);
 
@@ -17,13 +21,6 @@ public interface MedicalDeptSubDao {
 
     public void update(MedicalDeptSubEntity entity);
 
-    public long searchDoctorCount(Integer[] ids);
-
     public void deleteByIds(Integer[] ids);
-
 }
-
-
-
-
 
